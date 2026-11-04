@@ -60,11 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- OBFUSCAÇÃO DE LINKS EXTERNOS CONTRA SPAM BOTS ---
     window.startWhatsAppService = function() {
-        const num = atob('NTUzNDk3NjY4OTg3'); // +55 34 9766-8987
+        // Base64 para: 553497668987
+        const num = atob('NTUzNDk3NjY4OTg3');
         window.open(`https://wa.me/${num}?text=Olá, tudo bem? Gostaria de conhecer mais sobre a loja e receber atendimento VIP.`, '_blank');
     }
     
     window.handleInstaRedirect = function() {
+        // Base64 para: aboutique_angel
         const handle = atob('YWJvdXRpcXVlX2FuZ2Vs');
         window.open(`https://www.instagram.com/${handle}`, '_blank');
     }

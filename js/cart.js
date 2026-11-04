@@ -54,11 +54,10 @@ function renderFilters() {
         if(filterContainer) {
             const isActive = cat === activeCategory;
             const btnClass = isActive ? "bg-concept-coffee text-white" : "bg-white text-concept-coffee border-concept-coffee/20 hover:border-concept-coffee hover:bg-concept-base focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none";
-            filterContainer.innerHTML += `<button onclick="window.filterByCategory('${cat}')" class="px-8 py-3 rounded-sm border-2 text-xs font-extrabold tracking-[0.2em] uppercase transition-all shadow-sm ${btnClass}">${cat}</button>`;
+            filterContainer.innerHTML += `<button onclick="window.filterByCategory('${cat}')" class="px-8 py-3 rounded-sm border-2 text-xs font-extrabold tracking-[0.2em] uppercase transition-all shadow-sm btn-pop ${btnClass}">${cat}</button>`;
         }
         if(mobileContainer && cat !== 'Todos') {
-            // Contraste corrigido na Sidebar Mobile para leitura clara
-            mobileContainer.innerHTML += `<li><a href="#vitrine" onclick="document.getElementById('sidebar-modal').close(); window.filterByCategory('${cat}')" class="text-concept-coffee hover:text-concept-nude block transition-colors focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none">${cat}</a></li>`;
+            mobileContainer.innerHTML += `<li><a href="#vitrine" onclick="document.getElementById('sidebar-modal').close(); window.filterByCategory('${cat}')" class="text-white/80 hover:text-concept-nude block transition-colors focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none">${cat}</a></li>`;
         }
     });
 }
@@ -161,13 +160,13 @@ window.openProductModal = function(id) {
     let colorHtml = '';
     product.colors.forEach(c => {
         const border = c === '#FFFFFF' || c === '#F5F5F5' ? 'border border-gray-300' : 'border border-transparent';
-        colorHtml += `<button onclick="window.selectColor('${c}', this)" aria-label="Cor ${c}" class="color-btn w-10 h-10 rounded-full shadow-sm ring-offset-2 hover:scale-110 transition-transform ${border} focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none" style="background-color: ${c}"></button>`;
+        colorHtml += `<button onclick="window.selectColor('${c}', this)" aria-label="Cor ${c}" class="color-btn w-10 h-10 rounded-full shadow-sm ring-offset-2 hover:scale-110 transition-transform ${border} focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none btn-pop" style="background-color: ${c}"></button>`;
     });
     document.getElementById('modal-colors').innerHTML = colorHtml;
 
     let sizeHtml = '';
     product.sizes.forEach(s => {
-        sizeHtml += `<button onclick="window.selectSize('${s}', this)" class="size-btn w-12 h-12 border-2 border-concept-coffee/20 rounded-sm font-bold text-sm text-concept-coffee hover:border-concept-coffee transition-colors focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none">${s}</button>`;
+        sizeHtml += `<button onclick="window.selectSize('${s}', this)" class="size-btn w-12 h-12 border-2 border-concept-coffee/20 rounded-sm font-bold text-sm text-concept-coffee hover:border-concept-coffee transition-colors focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none btn-pop">${s}</button>`;
     });
     document.getElementById('modal-sizes').innerHTML = sizeHtml;
 
@@ -176,11 +175,7 @@ window.openProductModal = function(id) {
         document.querySelector('.size-btn').classList.add('bg-concept-coffee', 'text-white');
     }, 10);
 
-    // Ajuste para não abrir carrinho direto, apenas fechar o modal ou dar feedback visual discreto (CRO A11y)
-    document.getElementById('modal-add-btn').onclick = () => {
-        addToCartFromModal();
-        window.closeProductModal(); 
-    };
+    document.getElementById('modal-add-btn').onclick = () => addToCartFromModal();
     document.getElementById('product-modal').showModal();
 }
 
@@ -215,10 +210,11 @@ function addToCartFromModal() {
     
     updateCart();
     
-    // Feedback visual sutil (ao invés de abrir o carrinho imediatamente)
+    // Feedback visual sem abrir sacola
     const badge = document.getElementById('cart-count');
     badge.classList.add('scale-150', 'bg-concept-nude', 'text-concept-coffee');
     setTimeout(() => badge.classList.remove('scale-150', 'bg-concept-nude', 'text-concept-coffee'), 300);
+    window.closeProductModal();
 }
 
 window.changeQty = function(cartItemId, delta) {
@@ -257,9 +253,9 @@ function updateCart() {
                         <p class="text-concept-coffee font-bold text-sm">R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</p>
                     </div>
                     <div class="flex items-center bg-concept-base border border-concept-coffee/10 rounded-sm">
-                        <button aria-label="Remover" onclick="window.changeQty('${item.cartItemId}', -1)" class="w-10 h-10 flex items-center justify-center hover:bg-concept-nude/30 text-concept-coffee min-h-[44px] font-bold focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none">-</button>
+                        <button aria-label="Remover" onclick="window.changeQty('${item.cartItemId}', -1)" class="w-10 h-10 flex items-center justify-center hover:bg-concept-nude/30 text-concept-coffee min-h-[44px] font-bold focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none btn-pop">-</button>
                         <span class="w-6 text-center text-sm font-bold text-concept-coffee">${item.quantity}</span>
-                        <button aria-label="Adicionar" onclick="window.changeQty('${item.cartItemId}', 1)" class="w-10 h-10 flex items-center justify-center hover:bg-concept-nude/30 text-concept-coffee min-h-[44px] font-bold focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none">+</button>
+                        <button aria-label="Adicionar" onclick="window.changeQty('${item.cartItemId}', 1)" class="w-10 h-10 flex items-center justify-center hover:bg-concept-nude/30 text-concept-coffee min-h-[44px] font-bold focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none btn-pop">+</button>
                     </div>
                 </div>
             `;
@@ -304,10 +300,9 @@ window.checkoutWhatsApp = function() {
     });
     text += `*Total Estimado: R$ ${total.toFixed(2).replace('.', ',')}*%0A%0AAguardo atendimento exclusivo! ✨`;
 
-    // 553497668987 Ofuscado contra bots
+    // 553497668987 Ofuscado contra bots de spam
     const num = atob('NTUzNDk3NjY4OTg3'); 
     window.open(`https://wa.me/${num}?text=${text}`, '_blank');
 }
 
-// Start
 fetchStoreData();
