@@ -1,19 +1,12 @@
-# DG - Daniela Gontijo Concept
+# Daniela Gontijo Concept
 
 ## Sobre a Boutique
-A DG Daniela Gontijo Concept é uma boutique de moda feminina premium localizada em Uberaba, MG. Focada em elegância, caimento impecável e alfaiataria nobre, a marca propõe uma curadoria que valoriza a sofisticação da mulher moderna através de atendimento hiper-personalizado e consultoria de imagem.
+A Daniela Gontijo Concept é uma marca premium de moda feminina situada em Uberaba, MG. Focada em alfaiataria nobre e caimento perfeito, a marca oferece atendimento exclusivo, consultoria de imagem e moda concept para clientes exigentes. 
 
-## Coleções e Produtos
-- Alfaiataria Nobre (Blazers, calças de corte reto)
-- Vestidos & Fluidez
-- Conjuntos Concept
-- Acessórios de Luxo Minimalistas
+## Arquitetura de Conversão
+O site atua como um catálogo O2O (Online to Offline). O cliente seleciona itens, customiza cor/tamanho e envia a requisição codificada diretamente para um atendimento humano no WhatsApp para fechar a compra, sem intermediários financeiros no frontend web.
 
-## Informações de Contato e Localização
-- Endereço Físico: Rua Artur Machado, 518, Uberaba - MG.
-- WhatsApp Exclusivo: +55 (34) 9766-8987
+## Contato Estratégico
+- Rua Artur Machado, 518, Uberaba - MG.
 - Instagram: @aboutique_angel
-- Operação: Atendimento presencial na boutique física e consultoria on-line com envios estruturados.
-
-## Proposta de Valor
-A DG transcende a moda oferecendo uma experiência presencial acolhedora aliada a peças exclusivas com estoque reduzido. Foco total no detalhe, atendimento VIP via WhatsApp e embalagens presenteáveis para o mercado de luxo.
+- A marca não utiliza chamadas genéricas, promovendo escassez real através de estoques limitados.

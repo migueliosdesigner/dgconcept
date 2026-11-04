@@ -1,17 +1,23 @@
 User-agent: *
 Allow: /
 Disallow: /privacidade.html
-Disallow: /api/
+Disallow: /termos-uso.html
 Disallow: /assets/data/
 Disallow: /*?*
 Disallow: /*.json$
 
-# Bloqueio estrito contra bots de scraping/spam e extração de contatos
+# Bloqueio Expresso de Bots IA e Scrapers (Segurança Reforçada)
 User-agent: HTTrack
 Disallow: /
 User-agent: MJ12bot
 Disallow: /
 User-agent: AhrefsBot
+Disallow: /
+User-agent: GPTBot
+Disallow: /
+User-agent: ChatGPT-User
+Disallow: /
+User-agent: Google-Extended
 Disallow: /
 
 Sitemap: https://www.SEUDOMINIO.com.br/sitemap.xml

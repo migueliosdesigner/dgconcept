@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daniela Gontijo Concept | Moda Feminina em Uberaba</title>
     <meta name="description" content="Elegância que veste a sua melhor versão. Curadoria exclusiva de moda feminina e alfaiataria em Uberaba - MG. Catálogo online e atendimento VIP no WhatsApp.">
-    <meta name="keywords" content="moda feminina, roupas femininas, boutique uberaba, daniela gontijo, alfaiataria, concept store, vestidos de luxo, look do mes">
+    <meta name="keywords" content="moda feminina, roupas femininas, boutique uberaba, daniela gontijo, alfaiataria, concept store, vestidos de luxo">
     
     <!-- Open Graph SEO -->
     <meta property="og:title" content="Daniela Gontijo Concept">
@@ -29,18 +29,28 @@
                             nude: '#E6CCB2', 
                             coffee: '#3e2015',
                             coffeeLight: '#5a3121', 
-                            base: '#FAF8F5' 
+                            base: '#FDFBF7' /* Off-white cremoso */
                         }
                     },
                     fontFamily: { sans: ['Montserrat', 'sans-serif'], serif: ['Playfair Display', 'serif'] },
                     animation: {
                         'pop': 'pop 0.3s ease-out forwards',
+                        'fadeSlideUp': 'fadeSlideUp 0.4s ease-out forwards',
+                        'slideInLeft': 'slideInLeft 0.3s ease-out forwards'
                     },
                     keyframes: {
                         pop: {
                             '0%': { transform: 'scale(1)' },
                             '50%': { transform: 'scale(1.05)' },
                             '100%': { transform: 'scale(1)' },
+                        },
+                        fadeSlideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        slideInLeft: {
+                            '0%': { opacity: '0', transform: 'translateX(-100%)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' }
                         }
                     }
                 }
@@ -48,9 +58,6 @@
         }
     </script>
     
-    <!-- CSS Modularizado -->
-    <link rel="stylesheet" href="css/globals.css">
-
     <!-- Schema Markup (LocalBusiness) -->
     <script type="application/ld+json">
     {
@@ -69,20 +76,54 @@
     }
     </script>
     <style>
-        .btn-pop:active {
-            animation: pop 0.3s ease-out forwards;
+        /* CSS Crítico Unificado */
+        body { background-color: theme('colors.concept.base'); color: theme('colors.concept.coffee'); }
+        
+        /* Acessibilidade - Navegação por teclado global */
+        *:focus-visible { outline: none; box-shadow: 0 0 0 4px theme('colors.concept.nude'); border-radius: 4px; }
+        
+        /* Ícones Circulares Padrão */
+        .icon-circle {
+            width: 48px; height: 48px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            background: rgba(253, 251, 247, 0.95);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(62, 32, 21, 0.15);
+            color: #3e2015;
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
+        .icon-circle:hover { background: #3e2015; color: #FDFBF7; border-color: #3e2015; }
+
+        /* Animações de Interação (Pop) */
+        .btn-pop:active { animation: pop 0.3s ease-out forwards; }
+        .hover-pop { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .hover-pop:hover { transform: translateY(-4px); box-shadow: 0 15px 30px -5px rgba(62, 32, 21, 0.15); }
+        
+        .image-zoom { transition: transform 0.8s ease; }
+        .group:hover .image-zoom { transform: scale(1.05); }
+
+        /* Modais Nativos HTML5 */
+        dialog::backdrop { background: rgba(62, 32, 21, 0.85); backdrop-filter: blur(4px); }
+        dialog[open] { animation: fadeSlideUp 0.4s ease-out forwards; }
+        dialog#sidebar-modal[open] { animation: slideInLeft 0.3s ease-out forwards; }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .carousel-item { transition: opacity 1s ease-in-out; }
     </style>
 </head>
 <body class="antialiased flex flex-col min-h-screen relative">
 
-    <!-- Overlay da Pesquisa Global (Oculta por Padrão) -->
-    <div id="search-overlay" class="fixed inset-0 bg-concept-coffee/95 backdrop-blur-md z-[60] hidden flex-col items-center justify-center transition-opacity duration-300 opacity-0">
+    <!-- Overlay da Pesquisa Global (Oculta) -->
+    <div id="search-overlay" role="dialog" aria-modal="true" aria-label="Pesquisa Global" class="fixed inset-0 bg-concept-coffee/95 backdrop-blur-md z-[60] hidden flex-col items-center justify-center transition-opacity duration-300 opacity-0">
         <div class="w-full max-w-2xl px-6 relative">
-            <button onclick="window.toggleSearch()" aria-label="Fechar Pesquisa" class="absolute -top-12 right-6 text-white hover:text-concept-nude transition-colors focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none btn-pop">
+            <button onclick="window.App.toggleSearch()" aria-label="Fechar Pesquisa" class="absolute -top-12 right-6 text-white hover:text-concept-nude transition-colors btn-pop">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
-            <input type="text" id="global-search" onkeyup="window.filterProducts(this.value)" placeholder="Digite o que procura..." class="w-full bg-transparent border-b-2 border-concept-nude/50 text-white text-2xl md:text-4xl py-4 focus:outline-none focus:border-concept-nude placeholder-white/30 font-serif">
+            <input type="text" id="global-search" onkeyup="window.App.filterProducts(this.value)" placeholder="Digite o que procura..." class="w-full bg-transparent border-b-2 border-concept-nude/50 text-white text-2xl md:text-4xl py-4 focus:outline-none focus:border-concept-nude placeholder-white/30 font-serif">
         </div>
     </div>
 
@@ -92,27 +133,25 @@
     </div>
 
     <!-- Header Glassmorphism -->
-    <header class="sticky top-0 z-40 bg-concept-base/80 backdrop-blur-lg border-b border-concept-coffee/10 transition-all">
+    <header class="sticky top-0 z-40 bg-concept-base/90 backdrop-blur-lg border-b border-concept-coffee/10 transition-all">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center gap-4">
             
-            <!-- Menu Lateral (Hambúrguer) -->
             <div class="flex items-center w-1/3">
-                <button aria-label="Abrir Menu" onclick="document.getElementById('sidebar-modal').showModal()" class="icon-circle focus-visible:ring-4 focus-visible:ring-concept-coffee/50 focus-visible:outline-none btn-pop">
+                <button aria-label="Abrir Menu Principal" onclick="document.getElementById('sidebar-modal').showModal()" class="icon-circle btn-pop">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                 </button>
             </div>
 
-            <!-- Logo Central -->
-            <a href="#" class="flex items-center justify-center w-1/3 group hover:scale-105 transition-transform focus-visible:ring-4 focus-visible:ring-concept-coffee/50 focus-visible:outline-none btn-pop">
-                <img src="assets/img/logo_png.svg" alt="Daniela Gontijo Concept" class="h-12 md:h-16 object-contain" onerror="this.src=''; this.alt='Daniela Gontijo Concept'; this.className='font-serif text-3xl font-bold';">
+            <!-- Logo Central Oficial SVG -->
+            <a href="#" aria-label="Início Daniela Gontijo Concept" class="flex items-center justify-center w-1/3 group hover:scale-105 transition-transform btn-pop">
+                <img src="assets/img/logo_png.svg" alt="Daniela Gontijo Concept Logotipo" class="h-12 md:h-16 object-contain" onerror="this.src=''; this.alt='Daniela Gontijo Concept'; this.className='font-serif text-3xl font-bold text-concept-coffee';">
             </a>
 
-            <!-- Ações (Busca & Sacola) -->
             <div class="flex items-center justify-end gap-3 md:gap-5 w-1/3">
-                <button aria-label="Pesquisar" onclick="window.toggleSearch()" class="icon-circle focus-visible:ring-4 focus-visible:ring-concept-coffee/50 focus-visible:outline-none btn-pop">
+                <button aria-label="Abrir Busca" onclick="window.App.toggleSearch()" class="icon-circle btn-pop">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </button>
-                <button aria-label="Abrir Sacola" onclick="document.getElementById('cart-modal').showModal()" class="icon-circle relative group focus-visible:ring-4 focus-visible:ring-concept-coffee/50 focus-visible:outline-none btn-pop">
+                <button aria-label="Abrir Sacola de Compras" onclick="document.getElementById('cart-modal').showModal()" class="icon-circle relative group btn-pop">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                     <span id="cart-count" class="absolute -top-1 -right-1 bg-concept-coffee text-concept-nude text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full group-hover:scale-110 transition-transform shadow-md border border-concept-base">0</span>
                 </button>
@@ -121,78 +160,46 @@
     </header>
 
     <main class="flex-grow">
-        <!-- Hero Section (Carrossel Automático) -->
+        <!-- Hero Section (Carrossel) -->
         <section class="relative w-full h-[80vh] min-h-[550px] flex items-center justify-center overflow-hidden bg-concept-coffee">
             <div id="carousel-images" class="absolute inset-0 w-full h-full">
-                <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop" fetchpriority="high" class="carousel-item absolute inset-0 w-full h-full object-cover opacity-100 mix-blend-overlay" alt="Moda Concept" width="2070" height="1380">
-                <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=2070&auto=format&fit=crop" loading="lazy" class="carousel-item absolute inset-0 w-full h-full object-cover opacity-0 mix-blend-overlay" alt="Moda Elegante" width="2070" height="1380">
-                <img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=2070&auto=format&fit=crop" loading="lazy" class="carousel-item absolute inset-0 w-full h-full object-cover opacity-0 mix-blend-overlay" alt="Look Concept" width="2070" height="1380">
+                <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop" fetchpriority="high" class="carousel-item absolute inset-0 w-full h-full object-cover opacity-100 mix-blend-overlay" alt="Mulher vestindo moda concept elegante">
+                <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=2070&auto=format&fit=crop" loading="lazy" class="carousel-item absolute inset-0 w-full h-full object-cover opacity-0 mix-blend-overlay" alt="Detalhe de alfaiataria fina">
+                <img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=2070&auto=format&fit=crop" loading="lazy" class="carousel-item absolute inset-0 w-full h-full object-cover opacity-0 mix-blend-overlay" alt="Look editorial em ambiente de luxo">
             </div>
             
             <div class="absolute inset-0 z-20 flex items-center justify-between px-4 sm:px-8 pointer-events-none">
-                <button aria-label="Anterior" onclick="window.prevSlide()" class="pointer-events-auto icon-circle bg-concept-base/20 text-white hover:bg-concept-base/90 hover:text-concept-coffee border-none focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none btn-pop">
+                <button aria-label="Imagem Anterior" onclick="window.App.prevSlide()" class="pointer-events-auto icon-circle bg-concept-base/20 text-white hover:bg-concept-base/90 hover:text-concept-coffee border-none btn-pop">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                 </button>
-                <button aria-label="Próximo" onclick="window.nextSlide()" class="pointer-events-auto icon-circle bg-concept-base/20 text-white hover:bg-concept-base/90 hover:text-concept-coffee border-none focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none btn-pop">
+                <button aria-label="Próxima Imagem" onclick="window.App.nextSlide()" class="pointer-events-auto icon-circle bg-concept-base/20 text-white hover:bg-concept-base/90 hover:text-concept-coffee border-none btn-pop">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </button>
             </div>
 
             <div class="relative z-30 text-center px-6 max-w-5xl space-y-6 pointer-events-none">
+                <!-- Logo Light Obrigatória no Hero -->
                 <img src="assets/img/logo_light_png.png" alt="Daniela Gontijo Concept" class="h-40 md:h-52 mx-auto mb-6 drop-shadow-2xl" onerror="this.style.display='none'">
                 <h1 class="font-serif text-4xl md:text-6xl font-bold text-white leading-tight drop-shadow-xl">
                     Elegância que veste a sua melhor versão.
                 </h1>
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-6 pt-10 pointer-events-auto">
-                    <a href="#vitrine" class="w-full sm:w-auto bg-[#25D366] text-white px-12 py-5 text-sm font-extrabold uppercase tracking-widest hover:bg-[#128C7E] transition-colors rounded-sm min-h-[48px] shadow-2xl hover-pop flex items-center justify-center gap-3 focus-visible:ring-4 focus-visible:ring-[#25D366] focus-visible:outline-none btn-pop">
-                        <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    <!-- Botão Verde WhatsApp (CRO) -->
+                    <button onclick="window.App.startWhatsAppService('Olá, gostaria de conhecer mais sobre a loja.')" aria-label="Falar com Atendente no WhatsApp" class="w-full sm:w-auto bg-[#25D366] text-white px-10 py-5 text-sm font-extrabold uppercase tracking-widest hover:bg-[#128C7E] transition-colors rounded-sm min-h-[48px] shadow-2xl hover-pop flex items-center justify-center gap-3 btn-pop">
+                        <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                         Falar com atendente
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                    </a>
-                    <a href="#loja-fisica" class="w-full sm:w-auto bg-transparent border-2 border-concept-nude text-concept-nude px-12 py-5 text-sm font-extrabold uppercase tracking-widest hover:bg-concept-nude hover:text-concept-coffee transition-colors rounded-sm min-h-[48px] shadow-xl hover-pop backdrop-blur-md flex items-center justify-center focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none btn-pop">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                    <a href="#loja-fisica" aria-label="Ir para detalhes da Loja Física" class="w-full sm:w-auto bg-transparent border-2 border-concept-nude text-concept-nude px-12 py-5 text-sm font-extrabold uppercase tracking-widest hover:bg-concept-nude hover:text-concept-coffee transition-colors rounded-sm min-h-[48px] shadow-xl hover-pop backdrop-blur-md flex items-center justify-center btn-pop">
                         Ver Loja Física
                     </a>
                 </div>
             </div>
         </section>
 
-        <!-- Diferenciais -->
-        <section class="border-b border-concept-coffee/10 bg-white">
-            <div class="max-w-7xl mx-auto px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-10">
-                <div class="flex flex-col items-center text-center space-y-4">
-                    <svg class="w-10 h-10 text-concept-coffee" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
-                    <div>
-                        <h2 class="text-sm uppercase tracking-widest font-bold text-concept-coffee">Curadoria Exclusiva</h2>
-                        <span class="text-xs text-concept-coffeeLight font-semibold">Caimento Impecável</span>
-                    </div>
-                </div>
-                <div class="flex flex-col items-center text-center space-y-4">
-                    <svg class="w-10 h-10 text-concept-coffee" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    <div>
-                        <h2 class="text-sm uppercase tracking-widest font-bold text-concept-coffee">Rua Artur Machado</h2>
-                        <span class="text-xs text-concept-coffeeLight font-semibold">Visite nossa Boutique</span>
-                    </div>
-                </div>
-                <div class="flex flex-col items-center text-center space-y-4">
-                    <svg class="w-10 h-10 text-concept-coffee" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                    <div>
-                        <h2 class="text-sm uppercase tracking-widest font-bold text-concept-coffee">Consultoria On-line</h2>
-                        <span class="text-xs text-concept-coffeeLight font-semibold">Atendimento no WhatsApp</span>
-                    </div>
-                </div>
-                <div class="flex flex-col items-center text-center space-y-4">
-                    <svg class="w-10 h-10 text-concept-coffee" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-                    <div>
-                        <h2 class="text-sm uppercase tracking-widest font-bold text-concept-coffee">Embalagem de Luxo</h2>
-                        <span class="text-xs text-concept-coffeeLight font-semibold">Para você presentear</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Filtros de Categoria -->
-        <section class="py-8 bg-concept-base border-b border-concept-coffee/10">
-            <div class="max-w-7xl mx-auto px-6 flex items-center justify-center gap-4 flex-wrap" id="category-filters"></div>
+        <!-- Filtros Rápidos (Borda arrendondada p/ legibilidade no fundo branco) -->
+        <section class="py-10 bg-concept-base border-b border-concept-coffee/10">
+            <div class="max-w-7xl mx-auto px-6 flex items-center justify-center gap-4 flex-wrap" id="category-filters" role="tablist"></div>
         </section>
 
         <!-- Vitrine Dinâmica -->
@@ -204,43 +211,30 @@
                 </div>
                 
                 <div id="no-results" class="hidden text-center py-12 text-concept-coffeeLight">
-                    <svg class="w-12 h-12 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    <p class="font-serif text-2xl font-bold">Nenhuma peça encontrada com esse termo.</p>
+                    <p class="font-serif text-2xl font-bold">Nenhuma peça encontrada.</p>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="product-grid">
-                    <div class="animate-pulse space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="product-grid" role="list">
+                    <!-- Skeleton -->
+                    <div class="animate-pulse space-y-4" aria-hidden="true">
                         <div class="bg-white aspect-[3/4] rounded-sm"></div>
                         <div class="h-4 bg-white rounded w-3/4"></div>
                     </div>
                 </div>
 
                 <div class="flex justify-center mt-16 hidden" id="view-all-container">
-                    <button onclick="window.toggleAllProducts()" class="bg-transparent border-2 border-concept-coffee text-concept-coffee px-12 py-5 text-sm font-bold uppercase tracking-widest hover:bg-concept-coffee hover:text-white transition-colors rounded-sm min-h-[48px] shadow-sm hover-pop focus-visible:ring-4 focus-visible:ring-concept-coffee/50 focus-visible:outline-none btn-pop">
+                    <button onclick="window.App.toggleAllProducts()" aria-label="Ver todas as peças do catálogo" class="bg-transparent border-2 border-concept-coffee text-concept-coffee px-12 py-5 text-sm font-bold uppercase tracking-widest hover:bg-concept-coffee hover:text-white transition-colors rounded-sm min-h-[48px] shadow-sm hover-pop btn-pop">
                         Ver Todas as Peças
                     </button>
                 </div>
             </div>
         </section>
 
-        <!-- LookBook do Mês (Editorial Puro) -->
-        <section class="py-24 bg-white border-t border-concept-coffee/10">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="text-center mb-16">
-                    <span class="text-xs uppercase tracking-[0.2em] font-bold text-concept-nude mb-3 block">A Inspiração</span>
-                    <h2 class="font-serif text-4xl md:text-5xl text-concept-coffee font-bold">Look do Mês</h2>
-                </div>
-                <div class="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6" id="lookbook-grid">
-                    <div class="animate-pulse bg-concept-base h-96 rounded-sm w-full break-inside-avoid"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Área Loja Física -->
+        <!-- Área Loja Física (Localização) -->
         <section id="loja-fisica" class="py-24 bg-concept-base border-t border-concept-coffee/10">
             <div class="max-w-5xl mx-auto px-6">
                 <div class="bg-concept-coffee rounded-2xl shadow-2xl p-10 md:p-20 text-center hover-pop transition-all relative overflow-hidden">
-                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/5 to-transparent"></div>
+                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/5 to-transparent pointer-events-none"></div>
                     
                     <span class="relative z-10 text-xs uppercase tracking-[0.3em] font-bold text-concept-nude mb-4 block">Experiência Presencial</span>
                     <h2 class="relative z-10 font-serif text-4xl md:text-6xl font-bold text-white mb-6">Visite Nossa Boutique</h2>
@@ -250,14 +244,15 @@
                     
                     <div class="relative z-10 flex flex-col md:flex-row items-center justify-center gap-6 text-concept-base font-semibold mb-12">
                         <div class="w-14 h-14 rounded-full bg-white/10 flex items-center justify-center text-concept-nude shadow-inner border border-white/20">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            <!-- Ícone de Localização Corrigido -->
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 21c4.97-4.97 8-9.47 8-13A8 8 0 104 8c0 3.53 3.03 8.03 8 13z"></path><circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle></svg>
                         </div>
                         <span class="text-xl">Rua Artur Machado, 518<br>Uberaba - MG</span>
                     </div>
                     
-                    <a href="javascript:void(0)" onclick="window.handleMapsRedirect()" rel="noopener noreferrer" aria-label="Abrir rota no mapa" class="relative z-10 bg-concept-nude text-concept-coffee px-12 py-5 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-sm shadow-xl inline-flex items-center gap-3 focus-visible:ring-4 focus-visible:ring-white focus-visible:outline-none btn-pop">
+                    <a href="javascript:void(0)" onclick="window.App.handleMapsRedirect()" rel="noopener noreferrer" aria-label="Abrir rota no Google Maps" class="relative z-10 bg-concept-nude text-concept-coffee px-12 py-5 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-sm shadow-xl inline-flex items-center gap-3 btn-pop">
                         Saiba Como Chegar
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </a>
                 </div>
             </div>
@@ -268,14 +263,15 @@
     <footer class="bg-concept-coffee text-concept-base pt-20 pb-10 border-t-8 border-concept-nude">
         <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
             <div class="space-y-6">
+                <!-- Logo Footer Obrigatória -->
                 <img src="assets/img/logo_light_png.png" alt="Daniela Gontijo Concept" class="h-20 opacity-90" onerror="this.style.display='none'">
-                <h3 class="font-serif text-3xl text-concept-nude font-bold">Daniela Gontijo Concept</h3>
                 <p class="text-sm font-medium text-white/80 leading-relaxed max-w-xs">
                     Elegância atemporal e corte impecável. Criado para valorizar a força e a sofisticação da mulher atual.
                 </p>
                 <div class="flex gap-4 pt-2">
-                    <a href="javascript:void(0)" onclick="window.handleInstaRedirect()" aria-label="Acessar Instagram Oficial" class="w-12 h-12 border border-white/20 rounded-full flex items-center justify-center hover:bg-concept-nude hover:text-concept-coffee transition-colors focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none btn-pop">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z"/></svg>
+                    <a href="javascript:void(0)" onclick="window.App.handleInstaRedirect()" aria-label="Acessar Instagram Oficial" class="w-12 h-12 border border-white/20 rounded-full flex items-center justify-center hover:bg-concept-nude hover:text-concept-coffee transition-colors btn-pop">
+                        <!-- Ícone Instagram Oficial Corrigido -->
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                     </a>
                 </div>
             </div>
@@ -283,9 +279,9 @@
             <div>
                 <h2 class="font-serif text-concept-nude mb-6 text-xl">Navegação</h2>
                 <ul class="space-y-4 text-sm font-medium text-white/80">
-                    <li><a href="#vitrine" class="hover:text-concept-nude transition-colors min-h-[44px] block focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none">Catálogo Online</a></li>
-                    <li><a href="#loja-fisica" class="hover:text-concept-nude transition-colors min-h-[44px] block focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none">Nossa Loja Física</a></li>
-                    <li><a href="privacidade.html" class="hover:text-concept-nude transition-colors min-h-[44px] block focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none">Política de Privacidade</a></li>
+                    <li><a href="#vitrine" class="hover:text-concept-nude transition-colors min-h-[44px] block">Catálogo Online</a></li>
+                    <li><a href="#loja-fisica" class="hover:text-concept-nude transition-colors min-h-[44px] block">Nossa Loja Física</a></li>
+                    <li><a href="privacidade.html" class="hover:text-concept-nude transition-colors min-h-[44px] block">Política de Privacidade</a></li>
                 </ul>
             </div>
             
@@ -294,7 +290,8 @@
                 <ul class="space-y-5 text-sm font-medium text-white/90">
                     <li class="flex items-center gap-4">
                         <div class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-concept-nude shrink-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            <!-- Ícone de Localização Corrigido -->
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 21c4.97-4.97 8-9.47 8-13A8 8 0 104 8c0 3.53 3.03 8.03 8 13z"></path><circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle></svg>
                         </div>
                         <span>Rua Artur Machado, 518<br>Uberaba - MG</span>
                     </li>
@@ -304,85 +301,87 @@
         
         <div class="max-w-7xl mx-auto px-6 border-t border-white/10 pt-6 flex flex-col items-center gap-2 text-xs font-medium text-white/60 text-center">
             <p>© 2026 Daniela Gontijo Concept. Todos os direitos reservados.</p>
-            <p>O catálogo online é estritamente demonstrativo.</p>
+            <p>O catálogo online é estritamente demonstrativo. Vendas sujeitas à confirmação de estoque.</p>
         </div>
     </footer>
 
     <!-- Banner LGPD de Cookies -->
-    <div id="cookie-banner" class="fixed bottom-0 w-full bg-white border-t border-concept-coffee/10 text-concept-coffee p-5 z-[60] shadow-2xl hidden">
+    <div id="cookie-banner" role="dialog" aria-live="polite" class="fixed bottom-0 w-full bg-white border-t border-concept-coffee/10 text-concept-coffee p-5 z-[60] shadow-2xl hidden">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
-            <p class="text-sm font-bold text-center sm:text-left">Usamos tecnologias locais apenas para gerenciar a sacola. Ao continuar, você concorda com nossa <a href="privacidade.html" class="underline hover:text-concept-nude focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none">Política de Privacidade</a>.</p>
-            <button id="accept-cookies" class="bg-concept-coffee text-concept-nude px-8 py-4 rounded-sm font-bold text-xs tracking-widest uppercase hover:bg-concept-coffeeLight transition-colors min-h-[48px] whitespace-nowrap shadow-md focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none btn-pop">Aceitar e Fechar</button>
+            <p class="text-sm font-bold text-center sm:text-left">Usamos tecnologias locais apenas para gerenciar a sacola. Ao continuar, você concorda com nossa <a href="privacidade.html" class="underline hover:text-concept-nude">Política de Privacidade</a>.</p>
+            <button id="accept-cookies" aria-label="Aceitar cookies e fechar" class="bg-concept-coffee text-concept-nude px-8 py-4 rounded-sm font-bold text-xs tracking-widest uppercase hover:bg-concept-coffeeLight transition-colors min-h-[48px] whitespace-nowrap shadow-md btn-pop">Aceitar e Fechar</button>
         </div>
     </div>
 
     <!-- Modais Nativos HTML5 -->
     <!-- Sidebar -->
-    <dialog id="sidebar-modal" class="p-0 bg-transparent w-full max-w-sm m-0 h-full max-h-screen backdrop:bg-concept-coffee/80 backdrop:backdrop-blur-sm shadow-2xl">
+    <dialog id="sidebar-modal" aria-modal="true" aria-label="Menu Principal" class="p-0 bg-transparent w-full max-w-sm m-0 h-full max-h-screen backdrop:bg-concept-coffee/80 backdrop:backdrop-blur-sm shadow-2xl">
         <div class="bg-concept-coffee h-full flex flex-col border-r border-concept-coffee/10">
             <div class="p-6 border-b border-white/10 flex justify-between items-center bg-concept-coffee shadow-sm">
-                <img src="assets/img/logo_light_png.png" class="h-14 object-contain opacity-90" alt="Daniela Gontijo" onerror="this.src=''; this.alt='Daniela Gontijo';">
-                <button onclick="document.getElementById('sidebar-modal').close()" aria-label="Fechar" class="icon-circle border-none bg-white/10 text-white hover:text-concept-coffee focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none btn-pop">
+                <!-- Logo Light Obrigatória no Menu Esquerdo -->
+                <img src="assets/img/logo_light_png.png" class="h-16 object-contain opacity-90" alt="Daniela Gontijo Concept" onerror="this.src=''; this.alt='Daniela Gontijo';">
+                <button onclick="document.getElementById('sidebar-modal').close()" aria-label="Fechar Menu" class="icon-circle border-none bg-white/10 text-white hover:text-concept-coffee btn-pop">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
             
-            <div class="flex-1 overflow-y-auto p-8 space-y-10">
+            <nav class="flex-1 overflow-y-auto p-8 space-y-10">
                 <div>
                     <h2 class="text-xs uppercase tracking-[0.2em] font-bold text-concept-nude mb-5">Navegação</h2>
                     <ul class="space-y-5 font-serif text-2xl text-white">
-                        <li><a href="#vitrine" onclick="document.getElementById('sidebar-modal').close()" class="hover:text-concept-nude block transition-colors focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none">Coleções</a></li>
-                        <li><a href="#loja-fisica" onclick="document.getElementById('sidebar-modal').close()" class="hover:text-concept-nude block transition-colors focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none">A Boutique Física</a></li>
+                        <li><a href="#vitrine" onclick="document.getElementById('sidebar-modal').close()" class="hover:text-concept-nude block transition-colors">Coleções</a></li>
+                        <li><a href="#loja-fisica" onclick="document.getElementById('sidebar-modal').close()" class="hover:text-concept-nude block transition-colors">A Boutique Física</a></li>
                     </ul>
                 </div>
                 
                 <div>
                     <h2 class="text-xs uppercase tracking-[0.2em] font-bold text-concept-nude mb-5">Categorias</h2>
+                    <!-- Cores corrigidas para branco translúcido em fundo marrom -->
                     <ul class="space-y-4 font-bold text-white/80 text-base" id="mobile-categories">
                         <!-- Renderizado via JS -->
                     </ul>
                 </div>
-            </div>
+            </nav>
 
             <div class="p-8 bg-concept-coffee border-t border-white/10 space-y-4 shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
-                <button onclick="window.startWhatsAppService()" class="w-full bg-concept-nude text-concept-coffee font-bold uppercase tracking-widest text-xs py-5 rounded-sm hover:bg-white transition-colors min-h-[48px] shadow-lg flex items-center justify-center gap-3 focus-visible:ring-4 focus-visible:ring-white focus-visible:outline-none btn-pop">
-                    Fale Conosco no WhatsApp
+                <button onclick="window.App.startWhatsAppService('Olá, gostaria de conhecer a loja!')" aria-label="Fale conosco no WhatsApp" class="w-full bg-concept-nude text-concept-coffee font-bold uppercase tracking-widest text-xs py-5 rounded-sm hover:bg-white transition-colors min-h-[48px] shadow-lg flex items-center justify-center gap-3 btn-pop">
+                    Fale Conosco
                 </button>
             </div>
         </div>
     </dialog>
 
     <!-- Modal Produto -->
-    <dialog id="product-modal" class="p-0 bg-transparent w-full max-w-4xl m-auto backdrop:bg-concept-coffee/80 backdrop:backdrop-blur-sm rounded-sm shadow-2xl">
+    <dialog id="product-modal" aria-modal="true" aria-labelledby="modal-title" class="p-0 bg-transparent w-full max-w-4xl m-auto backdrop:bg-concept-coffee/80 backdrop:backdrop-blur-sm rounded-sm shadow-2xl">
         <div class="bg-white flex flex-col md:flex-row w-full max-h-[90vh] overflow-y-auto no-scrollbar relative">
-            <button onclick="window.closeProductModal()" aria-label="Fechar Detalhes" class="absolute top-4 right-4 z-50 icon-circle bg-white/80 focus-visible:ring-4 focus-visible:ring-concept-coffee/50 focus-visible:outline-none btn-pop">
+            <button onclick="window.App.closeProductModal()" aria-label="Fechar Detalhes da Peça" class="absolute top-4 right-4 z-50 icon-circle bg-white/80 btn-pop">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
             
             <div class="w-full md:w-1/2 bg-concept-base flex items-center justify-center p-4">
-                <img id="modal-img" src="" alt="Produto" class="w-full max-h-[60vh] md:max-h-full object-contain rounded-md shadow-sm">
+                <img id="modal-img" src="" alt="Imagem do produto selecionado" class="w-full max-h-[60vh] md:max-h-full object-contain rounded-md shadow-sm">
             </div>
             
             <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col">
                 <div id="modal-breadcrumb" class="text-[10px] uppercase tracking-widest text-concept-coffeeLight/70 mb-3 font-bold" aria-label="Trilha de navegação"></div>
                 <span id="modal-tag" class="text-xs uppercase tracking-widest font-bold text-concept-nude mb-2 block"></span>
-                <h3 id="modal-title" class="font-serif text-4xl text-concept-coffee mb-2 font-bold"></h3>
+                <h2 id="modal-title" class="font-serif text-4xl text-concept-coffee mb-2 font-bold"></h2>
                 <p id="modal-price" class="text-3xl font-bold text-concept-coffeeLight mb-8"></p>
                 
                 <div class="space-y-6 mb-8">
                     <fieldset>
                         <legend class="block text-xs font-bold text-concept-coffee uppercase tracking-widest mb-3">Cor</legend>
-                        <div class="flex gap-3" id="modal-colors"></div>
+                        <div class="flex gap-3" id="modal-colors" role="radiogroup" aria-label="Selecione a cor"></div>
                     </fieldset>
                     <fieldset>
                         <legend class="block text-xs font-bold text-concept-coffee uppercase tracking-widest mb-3">Tamanho</legend>
-                        <div class="flex gap-3" id="modal-sizes"></div>
+                        <div class="flex gap-3" id="modal-sizes" role="radiogroup" aria-label="Selecione o tamanho"></div>
                     </fieldset>
                 </div>
                 
                 <div class="mt-auto">
                     <p class="text-[10px] font-bold text-concept-coffeeLight/60 mb-4">*Estoque sujeito a confirmação no WhatsApp.</p>
-                    <button id="modal-add-btn" class="w-full bg-concept-coffee text-concept-nude font-bold uppercase tracking-widest text-xs py-5 rounded-sm hover:bg-concept-coffeeLight transition-colors min-h-[48px] shadow-lg hover-pop focus-visible:ring-4 focus-visible:ring-concept-coffee/50 focus-visible:outline-none btn-pop">
+                    <button id="modal-add-btn" aria-label="Adicionar peça à sacola" class="w-full bg-concept-coffee text-concept-nude font-bold uppercase tracking-widest text-xs py-5 rounded-sm hover:bg-concept-coffeeLight transition-colors min-h-[48px] shadow-lg hover-pop btn-pop">
                         Adicionar à Sacola
                     </button>
                 </div>
@@ -391,16 +390,16 @@
     </dialog>
 
     <!-- Modal Carrinho -->
-    <dialog id="cart-modal" class="p-0 bg-transparent w-full max-w-md ml-auto h-full max-h-screen m-0 backdrop:bg-concept-coffee/80 backdrop:backdrop-blur-sm">
+    <dialog id="cart-modal" aria-modal="true" aria-label="Sua Sacola" class="p-0 bg-transparent w-full max-w-md ml-auto h-full max-h-screen m-0 backdrop:bg-concept-coffee/80 backdrop:backdrop-blur-sm">
         <div class="bg-concept-base h-full shadow-2xl flex flex-col w-full border-l-4 border-concept-nude">
             <div class="p-6 border-b border-concept-coffee/10 flex justify-between items-center bg-white shadow-sm">
-                <h3 class="font-serif text-3xl font-bold text-concept-coffee">Sua Sacola</h3>
-                <button onclick="document.getElementById('cart-modal').close()" aria-label="Fechar Sacola" class="icon-circle border-none bg-concept-base focus-visible:ring-4 focus-visible:ring-concept-coffee/50 focus-visible:outline-none btn-pop">
+                <h2 class="font-serif text-3xl font-bold text-concept-coffee">Sua Sacola</h2>
+                <button onclick="document.getElementById('cart-modal').close()" aria-label="Fechar Sacola" class="icon-circle border-none bg-concept-base btn-pop">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
             
-            <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar"></div>
+            <div id="cart-items" role="list" aria-label="Itens na sacola" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar"></div>
 
             <div class="p-6 bg-white border-t border-concept-coffee/10 shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
                 <div class="flex justify-between items-end mb-6">
@@ -409,20 +408,388 @@
                 </div>
                 
                 <div class="flex items-start gap-3 mb-6 bg-concept-base p-4 rounded-sm border border-concept-coffee/10">
-                    <input type="checkbox" id="lgpd-cart" class="mt-1 w-5 h-5 accent-concept-coffee cursor-pointer">
+                    <input type="checkbox" id="lgpd-cart" class="mt-1 w-5 h-5 accent-concept-coffee cursor-pointer" aria-label="Aceitar política de privacidade para prosseguir">
                     <label for="lgpd-cart" class="text-xs text-concept-coffeeLight font-bold cursor-pointer leading-relaxed">
-                        Concordo com o envio do pedido e tratamento dos dados, conforme a <a href="privacidade.html" class="text-concept-coffee font-black underline hover:text-concept-nude focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none">Política de Privacidade</a>.
+                        Concordo com o envio do pedido e tratamento dos dados, conforme a <a href="privacidade.html" class="text-concept-coffee font-black underline hover:text-concept-nude">Política de Privacidade</a>.
                     </label>
                 </div>
 
-                <button id="btn-checkout" onclick="window.checkoutWhatsApp()" disabled aria-disabled="true" class="w-full bg-concept-coffee text-concept-nude py-5 rounded-sm font-bold uppercase tracking-[0.1em] text-xs flex items-center justify-center gap-3 transition-all duration-300 opacity-40 cursor-not-allowed min-h-[48px] focus-visible:ring-4 focus-visible:ring-concept-coffee/50 focus-visible:outline-none btn-pop">
+                <button id="btn-checkout" onclick="window.App.checkoutWhatsApp()" disabled aria-disabled="true" aria-label="Finalizar compra enviando pedido para o WhatsApp" class="w-full bg-concept-coffee text-concept-nude py-5 rounded-sm font-bold uppercase tracking-[0.1em] text-xs flex items-center justify-center gap-3 transition-all duration-300 opacity-40 cursor-not-allowed min-h-[48px] btn-pop">
                     Finalizar via WhatsApp
                 </button>
             </div>
         </div>
     </dialog>
 
-    <script src="js/main.js"></script>
-    <script src="js/cart.js"></script>
+    <!-- JavaScript Enclausurado (Segurança, Anti-Bot e Evita Poluição Global) -->
+    <script>
+        (function() {
+            // Isolamento total do escopo
+            const App = {
+                products: [],
+                filteredProducts: [],
+                cart: [],
+                activeProductForModal: null,
+                selectedColor: "",
+                selectedSize: "",
+                showAllProducts: false,
+                activeCategory: 'Todos',
+                currentSlide: 0,
+                slideInterval: 4000
+            };
+
+            // Injeta métodos no Window apenas se necessário para os botões inline HTML
+            window.App = App;
+
+            // --- SEGURANÇA BÁSICA ---
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            document.addEventListener('keydown', e => {
+                if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
+                    e.preventDefault(); return false;
+                }
+            });
+
+            // --- CARROSSEL ---
+            const slides = document.querySelectorAll('.carousel-item');
+            App.showSlide = function(index) {
+                slides.forEach((slide, i) => {
+                    slide.style.opacity = i === index ? '1' : '0';
+                    if(i === index) slide.removeAttribute('aria-hidden');
+                    else slide.setAttribute('aria-hidden', 'true');
+                });
+            }
+            App.nextSlide = function() {
+                App.currentSlide = (App.currentSlide + 1) % slides.length;
+                App.showSlide(App.currentSlide);
+            }
+            App.prevSlide = function() {
+                App.currentSlide = (App.currentSlide - 1 + slides.length) % slides.length;
+                App.showSlide(App.currentSlide);
+            }
+            if(slides.length > 0) setInterval(App.nextSlide, App.slideInterval);
+
+            // --- BUSCA OVERLAY ---
+            App.toggleSearch = function() {
+                const overlay = document.getElementById('search-overlay');
+                const input = document.getElementById('global-search');
+                if(overlay.classList.contains('hidden')) {
+                    overlay.classList.remove('hidden');
+                    setTimeout(() => { overlay.classList.remove('opacity-0'); input.focus(); }, 10);
+                } else {
+                    overlay.classList.add('opacity-0');
+                    setTimeout(() => { overlay.classList.add('hidden'); input.value = ''; }, 300);
+                }
+            }
+
+            // --- REDIRECIONAMENTOS OFUSCADOS (ANTI-SPAM) ---
+            App.startWhatsAppService = function(customMsg = "Olá, tudo bem? Gostaria de conhecer mais sobre a loja e receber atendimento VIP.") {
+                const num = atob('NTUzNDk3NjY4OTg3'); // +55 34 9766-8987
+                const msg = encodeURIComponent(customMsg);
+                window.open(`https://wa.me/${num}?text=${msg}`, '_blank');
+            }
+            App.handleInstaRedirect = function() {
+                const handle = atob('YWJvdXRpcXVlX2FuZ2Vs');
+                window.open(`https://www.instagram.com/${handle}`, '_blank');
+            }
+            App.handleMapsRedirect = function() {
+                window.open('https://abre.ai/maps-dgconcept', '_blank');
+            }
+
+            // --- E-COMMERCE LOGIC ---
+            App.fetchStoreData = async function() {
+                try {
+                    const res = await fetch('assets/data/products.json');
+                    if(!res.ok) throw new Error();
+                    App.products = await res.json();
+                } catch(e) {
+                    App.products = [
+                        { id: 1, name: "Vestido Alfaiataria Noite", category: "Vestidos", price: 799.90, img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=400&auto=format&fit=crop", tag: "Festa", colors: ["#000000", "#3e2015"], sizes: ["P", "M"] },
+                        { id: 2, name: "Blazer Alongado Paris", category: "Alfaiataria", price: 489.90, img: "https://images.unsplash.com/photo-1550614000-4b95d466f1fc?q=80&w=400&auto=format&fit=crop", tag: "Exclusivo", colors: ["#F5F5F5", "#000000"], sizes: ["P", "M", "G"] },
+                        { id: 3, name: "Calça Pantalona Fluída", category: "Alfaiataria", price: 349.90, img: "https://images.unsplash.com/photo-1509319117193-57bab727e09d?q=80&w=400&auto=format&fit=crop", tag: "", colors: ["#000000", "#3e2015"], sizes: ["36", "38", "40"] },
+                        { id: 4, name: "Conjunto Seda Concept", category: "Conjuntos", price: 620.00, img: "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=400&auto=format&fit=crop", tag: "Novidade", colors: ["#E6CCB2", "#FFFFFF"], sizes: ["P", "M", "G"] }
+                    ];
+                }
+                App.filteredProducts = [...App.products];
+                App.renderFilters();
+                App.renderProducts(App.filteredProducts);
+            }
+
+            App.renderFilters = function() {
+                const categories = ['Todos', ...new Set(App.products.map(p => p.category))];
+                const filterContainer = document.getElementById('category-filters');
+                const mobileContainer = document.getElementById('mobile-categories');
+                
+                if(filterContainer) filterContainer.innerHTML = '';
+                if(mobileContainer) mobileContainer.innerHTML = '';
+
+                categories.forEach(cat => {
+                    if(filterContainer) {
+                        const isActive = cat === App.activeCategory;
+                        const btnClass = isActive ? "bg-concept-coffee text-white" : "bg-white text-concept-coffee border-concept-coffee/20 hover:border-concept-coffee hover:bg-concept-base";
+                        // A borda arredondada em marrom garante visibilidade do texto creme/marrom sobre fundo branco
+                        filterContainer.innerHTML += `<button onclick="window.App.filterByCategory('${cat}')" aria-label="Filtrar por ${cat}" class="px-8 py-3 rounded-xl border-2 text-xs font-extrabold tracking-[0.2em] uppercase transition-all shadow-sm btn-pop focus-visible:ring-4 focus-visible:ring-concept-coffee/50 ${btnClass}" role="tab" aria-selected="${isActive}">${cat}</button>`;
+                    }
+                    if(mobileContainer && cat !== 'Todos') {
+                        // Cores de contraste garantidas na sidebar (Fundo Escuro)
+                        mobileContainer.innerHTML += `<li><a href="#vitrine" onclick="document.getElementById('sidebar-modal').close(); window.App.filterByCategory('${cat}')" class="text-white/80 hover:text-concept-nude block transition-colors focus-visible:ring-4 focus-visible:ring-white focus-visible:outline-none rounded-sm p-1">${cat}</a></li>`;
+                    }
+                });
+            }
+
+            App.filterByCategory = function(cat) {
+                App.activeCategory = cat;
+                App.showAllProducts = false;
+                App.filteredProducts = cat === 'Todos' ? [...App.products] : App.products.filter(p => p.category === cat);
+                App.renderFilters();
+                App.renderProducts(App.filteredProducts);
+            }
+
+            App.filterProducts = function(query) {
+                const q = query.toLowerCase().trim();
+                App.filteredProducts = App.products.filter(p => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
+                App.showAllProducts = true; 
+                App.renderProducts(App.filteredProducts);
+                
+                const overlay = document.getElementById('search-overlay');
+                if(overlay && !overlay.classList.contains('hidden') && query.length > 2) {
+                    App.toggleSearch();
+                    document.getElementById('vitrine').scrollIntoView();
+                }
+            }
+
+            App.toggleAllProducts = function() {
+                App.showAllProducts = true;
+                App.renderProducts(App.filteredProducts);
+            }
+
+            App.renderProducts = function(lista) {
+                const grid = document.getElementById('product-grid');
+                const noResults = document.getElementById('no-results');
+                const btnContainer = document.getElementById('view-all-container');
+                
+                if(!grid) return;
+                grid.innerHTML = '';
+                
+                if(lista.length === 0) {
+                    noResults.classList.remove('hidden');
+                    grid.classList.add('hidden');
+                    btnContainer.classList.add('hidden');
+                } else {
+                    noResults.classList.add('hidden');
+                    grid.classList.remove('hidden');
+                    
+                    const displayList = App.showAllProducts ? lista : lista.slice(0, 4);
+                    if (lista.length > 4 && !App.showAllProducts) btnContainer.classList.remove('hidden');
+                    else btnContainer.classList.add('hidden');
+
+                    displayList.forEach(p => {
+                        grid.innerHTML += `
+                            <article class="group flex flex-col bg-white p-4 rounded-sm shadow-sm hover-pop border border-concept-coffee/5 relative focus-within:ring-4 focus-within:ring-concept-nude" tabindex="0" onkeypress="if(event.key==='Enter') window.App.openProductModal(${p.id})">
+                                ${p.tag ? `<span class="absolute top-6 left-6 z-20 bg-concept-coffee text-concept-nude text-[9px] font-extrabold px-3 py-1.5 uppercase tracking-[0.2em] rounded-sm shadow-sm">${p.tag}</span>` : ''}
+                                
+                                <div class="relative bg-concept-base overflow-hidden mb-5 aspect-[3/4] cursor-pointer" onclick="window.App.openProductModal(${p.id})">
+                                    <img src="${p.img}" loading="lazy" class="w-full h-full object-cover image-zoom" alt="${p.name}">
+                                    <div class="absolute inset-0 bg-concept-coffee/20 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+                                        <span class="bg-white text-concept-coffee font-bold text-xs tracking-widest uppercase px-6 py-3 shadow-xl rounded-sm btn-pop">Ver Detalhes</span>
+                                    </div>
+                                </div>
+                                <h3 class="font-serif text-concept-coffee text-xl font-bold mb-1 leading-snug cursor-pointer hover:text-concept-nude" onclick="window.App.openProductModal(${p.id})">${p.name}</h3>
+                                <p class="font-bold text-concept-coffeeLight text-lg">R$ ${p.price.toFixed(2).replace('.', ',')}</p>
+                            </article>
+                        `;
+                    });
+                }
+            }
+
+            App.openProductModal = function(id) {
+                const product = App.products.find(p => p.id === id);
+                App.activeProductForModal = product;
+                App.selectedColor = product.colors[0]; 
+                App.selectedSize = product.sizes[0];
+
+                document.getElementById('modal-img').src = product.img;
+                document.getElementById('modal-img').alt = `Foto detalhada de ${product.name}`;
+                document.getElementById('modal-tag').innerText = product.tag || '';
+                document.getElementById('modal-title').innerText = product.name;
+                document.getElementById('modal-price').innerText = `R$ ${product.price.toFixed(2).replace('.', ',')}`;
+                document.getElementById('modal-breadcrumb').innerText = `Catálogo > ${product.category} > ${product.name}`;
+                
+                let colorHtml = '';
+                product.colors.forEach(c => {
+                    const border = c === '#FFFFFF' || c === '#F5F5F5' ? 'border border-gray-300' : 'border border-transparent';
+                    const isSelected = c === App.selectedColor ? 'ring-2 ring-concept-coffee' : '';
+                    colorHtml += `<button onclick="window.App.selectColor('${c}')" aria-label="Cor ${c}" class="color-btn w-10 h-10 rounded-full shadow-sm ring-offset-2 hover:scale-110 transition-transform ${border} ${isSelected} focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none btn-pop" style="background-color: ${c}" role="radio" aria-checked="${c === App.selectedColor}"></button>`;
+                });
+                document.getElementById('modal-colors').innerHTML = colorHtml;
+
+                let sizeHtml = '';
+                product.sizes.forEach(s => {
+                    const isSelected = s === App.selectedSize ? 'bg-concept-coffee text-white' : 'text-concept-coffee';
+                    sizeHtml += `<button onclick="window.App.selectSize('${s}')" aria-label="Tamanho ${s}" class="size-btn w-12 h-12 border-2 border-concept-coffee/20 rounded-sm font-bold text-sm hover:border-concept-coffee transition-colors ${isSelected} focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none btn-pop" role="radio" aria-checked="${s === App.selectedSize}">${s}</button>`;
+                });
+                document.getElementById('modal-sizes').innerHTML = sizeHtml;
+
+                document.getElementById('modal-add-btn').onclick = () => App.addToCartFromModal();
+                document.getElementById('product-modal').showModal();
+            }
+
+            App.closeProductModal = function() { document.getElementById('product-modal').close(); }
+
+            App.selectColor = function(color) {
+                App.selectedColor = color;
+                const btns = document.querySelectorAll('.color-btn');
+                btns.forEach(btn => {
+                    btn.classList.remove('ring-2', 'ring-concept-coffee');
+                    btn.setAttribute('aria-checked', 'false');
+                    if(btn.style.backgroundColor === color || btn.style.backgroundColor.replace(/ /g,'') === color.toLowerCase()) {
+                        btn.classList.add('ring-2', 'ring-concept-coffee');
+                        btn.setAttribute('aria-checked', 'true');
+                    }
+                });
+            }
+
+            App.selectSize = function(size) {
+                App.selectedSize = size;
+                const btns = document.querySelectorAll('.size-btn');
+                btns.forEach(btn => {
+                    btn.classList.remove('bg-concept-coffee', 'text-white');
+                    btn.classList.add('text-concept-coffee');
+                    btn.setAttribute('aria-checked', 'false');
+                    if(btn.innerText === size) {
+                        btn.classList.add('bg-concept-coffee', 'text-white');
+                        btn.classList.remove('text-concept-coffee');
+                        btn.setAttribute('aria-checked', 'true');
+                    }
+                });
+            }
+
+            App.addToCartFromModal = function() {
+                const product = App.activeProductForModal;
+                const cartItemId = `${product.id}-${App.selectedColor}-${App.selectedSize}`;
+                
+                const existingItem = App.cart.find(i => i.cartItemId === cartItemId);
+                if(existingItem) { 
+                    existingItem.quantity++; 
+                } else { 
+                    App.cart.push({ ...product, cartItemId, selectedColor: App.selectedColor, selectedSize: App.selectedSize, quantity: 1 }); 
+                }
+                
+                App.updateCart();
+                
+                // Feedback visual sutil (não abre o modal do carrinho direto)
+                const badge = document.getElementById('cart-count');
+                badge.classList.add('scale-150', 'bg-concept-nude', 'text-concept-coffee');
+                setTimeout(() => badge.classList.remove('scale-150', 'bg-concept-nude', 'text-concept-coffee'), 300);
+                App.closeProductModal();
+            }
+
+            App.changeQty = function(cartItemId, delta) {
+                const item = App.cart.find(i => i.cartItemId === cartItemId);
+                if(item) {
+                    item.quantity += delta;
+                    if(item.quantity <= 0) App.cart = App.cart.filter(i => i.cartItemId !== cartItemId);
+                    App.updateCart();
+                }
+            }
+
+            App.updateCart = function() {
+                const container = document.getElementById('cart-items');
+                const totalEl = document.getElementById('cart-total');
+                const badge = document.getElementById('cart-count');
+                
+                let html = ''; let total = 0; let qty = 0;
+
+                if(App.cart.length === 0) {
+                    html = '<div class="text-center text-concept-coffeeLight py-16"><p class="font-serif text-2xl font-bold">Sua sacola está vazia.</p></div>';
+                    badge.classList.add('hidden');
+                } else {
+                    badge.classList.remove('hidden');
+                    App.cart.forEach(item => {
+                        total += item.price * item.quantity;
+                        qty += item.quantity;
+                        
+                        const colorBlock = `<span class="inline-block w-4 h-4 rounded-full border border-gray-300 ml-1 translate-y-[3px]" style="background-color: ${item.selectedColor}" aria-label="Cor escolhida"></span>`;
+                        
+                        html += `
+                            <article class="flex items-center gap-4 bg-white p-4 rounded-sm border border-concept-coffee/10 shadow-sm" role="listitem">
+                                <img src="${item.img}" alt="${item.name}" class="w-16 h-24 object-cover rounded-sm bg-concept-base">
+                                <div class="flex-1">
+                                    <h4 class="font-serif text-concept-coffee font-bold text-sm leading-tight mb-1">${item.name}</h4>
+                                    <p class="text-[10px] font-bold text-concept-coffeeLight mb-1 uppercase tracking-widest">Tam: ${item.selectedSize} | Cor: ${colorBlock}</p>
+                                    <p class="text-concept-coffee font-bold text-sm">R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</p>
+                                </div>
+                                <div class="flex items-center bg-concept-base border border-concept-coffee/10 rounded-sm">
+                                    <button aria-label="Remover um item" onclick="window.App.changeQty('${item.cartItemId}', -1)" class="w-10 h-10 flex items-center justify-center hover:bg-concept-nude/30 text-concept-coffee min-h-[44px] font-bold focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none btn-pop">-</button>
+                                    <span class="w-6 text-center text-sm font-bold text-concept-coffee" aria-label="Quantidade ${item.quantity}">${item.quantity}</span>
+                                    <button aria-label="Adicionar mais um" onclick="window.App.changeQty('${item.cartItemId}', 1)" class="w-10 h-10 flex items-center justify-center hover:bg-concept-nude/30 text-concept-coffee min-h-[44px] font-bold focus-visible:ring-4 focus-visible:ring-concept-nude focus-visible:outline-none btn-pop">+</button>
+                                </div>
+                            </article>
+                        `;
+                    });
+                }
+                if(container) container.innerHTML = html;
+                if(totalEl) totalEl.innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+                if(badge) badge.innerText = qty;
+            }
+
+            App.checkoutWhatsApp = function() {
+                const checkbox = document.getElementById('lgpd-cart');
+                if(App.cart.length === 0 || !checkbox.checked) return;
+                
+                // Formatação exata com \n para encodeURIComponent
+                let text = "Olá, Daniela Gontijo Concept! Fiz uma seleção no catálogo online e gostaria de dar andamento no meu pedido:\n\n";
+                let total = 0;
+                
+                App.cart.forEach(item => {
+                    const valorItem = (item.price * item.quantity).toFixed(2).replace('.', ',');
+                    text += `• ${item.quantity}x ${item.name} (Tam: ${item.selectedSize} | Cor: ${item.selectedColor}) - R$ ${valorItem}\n`;
+                    total += item.price * item.quantity;
+                });
+                
+                const valorTotal = total.toFixed(2).replace('.', ',');
+                text += `\n*Total do Pedido: R$ ${valorTotal}*\n\n`;
+                text += "Como posso prosseguir com o pagamento e envio/retirada na Rua Artur Machado, 518?";
+
+                const textoCodificado = encodeURIComponent(text);
+                const num = atob('NTUzNDk3NjY4OTg3'); // +55 34 9766-8987 obfuscado
+                window.open(`https://wa.me/${num}?text=${textoCodificado}`, '_blank');
+            }
+
+            // Atrelamento Checkout LGPD
+            const checkbox = document.getElementById('lgpd-cart');
+            const btnCheckout = document.getElementById('btn-checkout');
+            if(checkbox && btnCheckout) {
+                checkbox.addEventListener('change', (e) => {
+                    if(e.target.checked && App.cart.length > 0) {
+                        btnCheckout.removeAttribute('disabled');
+                        btnCheckout.removeAttribute('aria-disabled');
+                        btnCheckout.classList.remove('opacity-40', 'cursor-not-allowed', 'bg-concept-coffee');
+                        btnCheckout.classList.add('bg-[#25D366]', 'hover-pop', 'shadow-xl'); 
+                    } else {
+                        btnCheckout.setAttribute('disabled', 'true');
+                        btnCheckout.setAttribute('aria-disabled', 'true');
+                        btnCheckout.classList.add('opacity-40', 'cursor-not-allowed', 'bg-concept-coffee');
+                        btnCheckout.classList.remove('bg-[#25D366]', 'hover-pop', 'shadow-xl');
+                    }
+                });
+            }
+
+            // Inicializar Dados
+            App.fetchStoreData();
+
+            // Ativa Banner Cookies
+            if (!localStorage.getItem('lgpd_dgconcept')) {
+                const cb = document.getElementById('cookie-banner');
+                if(cb) cb.classList.remove('hidden');
+            }
+            const acceptBtn = document.getElementById('accept-cookies');
+            if(acceptBtn) {
+                acceptBtn.addEventListener('click', () => {
+                    localStorage.setItem('lgpd_dgconcept', 'aceito');
+                    document.getElementById('cookie-banner').classList.add('hidden');
+                });
+            }
+        })();
+    </script>
 </body>
 </html>

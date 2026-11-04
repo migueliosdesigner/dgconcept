@@ -60,18 +60,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- OBFUSCAÇÃO DE LINKS EXTERNOS CONTRA SPAM BOTS ---
     window.startWhatsAppService = function() {
-        // Base64 para: 553497668987
-        const num = atob('NTUzNDk3NjY4OTg3');
+        const num = atob('NTUzNDk3NjY4OTg3'); // +55 34 9766-8987
         window.open(`https://wa.me/${num}?text=Olá, tudo bem? Gostaria de conhecer mais sobre a loja e receber atendimento VIP.`, '_blank');
     }
     
     window.handleInstaRedirect = function() {
-        // Base64 para: aboutique_angel
         const handle = atob('YWJvdXRpcXVlX2FuZ2Vs');
         window.open(`https://www.instagram.com/${handle}`, '_blank');
     }
 
     window.handleMapsRedirect = function() {
         window.open('https://abre.ai/maps-dgconcept', '_blank');
+    }
+    
+    // Bloqueio de ferramentas de desenvolvedor para mitigar Bots
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    document.onkeydown = function(e) {
+        if(e.keyCode == 123) return false;
+        if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false;
+        if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false;
+        if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
     }
 });
