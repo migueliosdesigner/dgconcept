@@ -288,21 +288,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-window.checkoutWhatsApp = function() {
-    const checkbox = document.getElementById('lgpd-cart');
-    if(cart.length === 0 || !checkbox.checked) return;
-    
-    let text = "Olá, Daniela Gontijo Concept! Fiz uma seleção no catálogo online e gostaria de dar andamento no meu pedido:%0A%0A";
-    let total = 0;
-    cart.forEach(i => {
-        text += `🛍 ${i.quantity}x ${i.name}%0A   Tam: ${i.selectedSize} | Cor: ${i.selectedColor}%0A   Sub: R$ ${(i.price * i.quantity).toFixed(2).replace('.', ',')}%0A%0A`;
-        total += i.price * i.quantity;
-    });
-    text += `*Total Estimado: R$ ${total.toFixed(2).replace('.', ',')}*%0A%0AAguardo atendimento exclusivo! ✨`;
+// Substitua ou insira esta função no seu script onde o botão de finalizar pedido é acionado.
 
-    // 553497668987 Ofuscado contra bots de spam
+window.checkoutWhatsApp = function() {
+    // 1. Verificação da LGPD
+    const checkbox = document.getElementById('lgpd-cart');
+    if (cart.length === 0 || !checkbox.checked) return;
+    
+    // 2. Construção da Saudação Editorial
+    // Utilizamos \n para quebrar linha na string do JS antes de converter
+    let text = "Olá, DG Daniela Gontijo Concept! Fiz uma seleção no catálogo online e gostaria de dar andamento no meu pedido:\n\n";
+    
+    let total = 0;
+
+    // 3. Mapeando os itens do carrinho (Formatados com Bullet points)
+    cart.forEach(item => {
+        // Formata o subtotal do item
+        const valorItem = (item.price * item.quantity).toFixed(2).replace('.', ',');
+        
+        // Constrói a linha do item com detalhes[cite: 23]
+        text += `• ${item.quantity}x ${item.name} (Tam: ${item.selectedSize} | Cor: ${item.selectedColor}) - R$ ${valorItem}\n`;
+        
+        total += item.price * item.quantity;
+    });
+
+    // 4. Adicionando o Total e a Chamada Final (Quebra de Objeções)[cite: 23]
+    const valorTotal = total.toFixed(2).replace('.', ',');
+    text += `\n*Total do Pedido: R$ ${valorTotal}*\n\n`;
+    text += "Como posso prosseguir com o pagamento e envio/retirada na Rua Artur Machado, 518?";
+
+    // 5. Tratamento RIGOROSO da URL (A Mágica Anti-Corte)
+    // Transforma espaços, \n e acentos em caracteres de URL (ex: %20, %0A)
+    const textoCodificado = encodeURIComponent(text);
+
+    // 6. Envio Ofuscado para Segurança (Evitar Spam Bots)[cite: 25]
+    // Base64 para: 553497668987
     const num = atob('NTUzNDk3NjY4OTg3'); 
-    window.open(`https://wa.me/${num}?text=${text}`, '_blank');
+    
+    // 7. Abertura do Link
+    window.open(`https://wa.me/${num}?text=${textoCodificado}`, '_blank');
 }
 
 fetchStoreData();
