@@ -1,0 +1,66 @@
+/* Diretório: css/globals.css */
+
+/* Ícones Circulares Padronizados (Cabeçalho/Ações) */
+.icon-circle {
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: rgba(250, 248, 245, 0.85); /* Fundo base com blur */
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(62, 32, 21, 0.1); /* Coffee com opacidade */
+    color: #3e2015;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.icon-circle:hover {
+    background: #3e2015;
+    color: #FAF8F5;
+    border-color: #3e2015;
+}
+
+/* Micro-interações Pop (Imagens e Cards) */
+.hover-pop { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+.hover-pop:hover { 
+    transform: translateY(-4px); 
+    box-shadow: 0 15px 30px -5px rgba(62, 32, 21, 0.15); 
+}
+
+/* Zoom de Imagem nos Cards */
+.image-zoom { transition: transform 0.8s ease; }
+.group:hover .image-zoom { transform: scale(1.05); }
+
+/* Modais Nativos HTML5 (<dialog>) e Animações */
+dialog::backdrop { background: rgba(62, 32, 21, 0.85); backdrop-filter: blur(4px); }
+
+dialog#cart-modal[open], dialog#product-modal[open] { 
+    animation: fadeSlideUp 0.4s ease-out forwards; 
+}
+@keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+dialog#sidebar-modal[open] { 
+    animation: slideInLeft 0.3s ease-out forwards; 
+}
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-100%); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Accordion Customizado (FAQ) */
+details > summary { list-style: none; }
+details > summary::-webkit-details-marker { display: none; }
+details[open] summary ~ * { animation: sweep .4s ease-in-out; }
+@keyframes sweep { 
+    0% {opacity: 0; margin-top: -10px} 
+    100% {opacity: 1; margin-top: 0px} 
+}
+
+/* Ocultação de Scrollbars em containers laterais/menus */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Carrossel Transition */
+.carousel-item { transition: opacity 1s ease-in-out; }

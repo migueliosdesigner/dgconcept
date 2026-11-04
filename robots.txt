@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Disallow: /privacidade.html
+Disallow: /api/
+Disallow: /assets/data/
+Disallow: /*?*
+Disallow: /*.json$
+
+# Bloqueio estrito contra bots de scraping/spam e extração de contatos
+User-agent: HTTrack
+Disallow: /
+User-agent: MJ12bot
+Disallow: /
+User-agent: AhrefsBot
+Disallow: /
+
+Sitemap: https://www.SEUDOMINIO.com.br/sitemap.xml
